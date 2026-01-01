@@ -1,8 +1,12 @@
 name: Output info
 on:
+  workflow_dispatch:
   pull_request:
     types: [opened]
-  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths-ignore: ['.github/workflows/*']
 jobs:
   info:
     runs-on: ubuntu-latest
