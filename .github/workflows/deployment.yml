@@ -8,8 +8,10 @@ env:
 
 jobs:
   test:
+    # environment: "staging" | "test" | "production..." # gotta config in GH settings.
     env:
       DB_CLUSTER_ADDRESS: ""
+      # STH_SECRET: ${{ secrets.STH_SECRET }}
       PORT: 3000
     runs-on: ubuntu-latest
     steps:
