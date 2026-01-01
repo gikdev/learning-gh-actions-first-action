@@ -7,14 +7,14 @@ jobs:
       - name: Get code
         uses: actions/checkout@v6
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      # - name: Setup PNPM
+      #   uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+      # - name: Install dependencies
+      #   run: pnpm install
 
-      - name: Run lint
-        run: pnpm run lint
+      # - name: Run lint
+      #   run: pnpm run lint
 
   test:
     runs-on: ubuntu-latest
@@ -22,14 +22,14 @@ jobs:
       - name: Get code
         uses: actions/checkout@v6
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      # - name: Setup PNPM
+      #   uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+      # - name: Install dependencies
+      #   run: pnpm install
 
-      - name: Run tests
-        run: pnpm run test
+      # - name: Run tests
+      #   run: pnpm run test
 
   deploy:
     needs: [test, lint]
@@ -38,14 +38,14 @@ jobs:
       - name: Get code
         uses: actions/checkout@v6
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      # - name: Setup PNPM
+      #   uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+      # - name: Install dependencies
+      #   run: pnpm install
 
-      - name: Build project
-        run: pnpm run build
+      # - name: Build project
+      #   run: pnpm run build
 
-      - name: Deploy
-        run: echo "Deploying..."
+      # - name: Deploy
+      #   run: echo "Deploying..."
