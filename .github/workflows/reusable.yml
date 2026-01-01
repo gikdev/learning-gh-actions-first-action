@@ -1,0 +1,25 @@
+name: Reusable Deploy
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        type: string
+        required: false
+        default: dist
+        description: name of deployable artifact file
+    # secrets:
+    #   some-secret:
+    #     required: true
+    # outputs: # search about how to do it... if u need.
+    #   result:
+    #     description: result of operation
+    #     value:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hi!"
+      - name: Get build artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ inputs.artifact-name }}

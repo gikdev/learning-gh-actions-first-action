@@ -62,13 +62,21 @@ jobs:
 
   deploy:
     needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get build artifacts
-        uses: actions/download-artifact@v7
-        with:
-          name: dist-files
-      - run: echo "Deploying... ${{ needs.build.outputs.script-file }}"
+    uses: ./.github/workflows/reusable.yml
+    with:
+      artifact-name: dist-files
+    # secrets:
+    #   some-secret: sth
+
+    # runs-on: ubuntu-latest
+    # steps:
+    #   - name: Get build artifacts
+    #     uses: actions/download-artifact@v7
+    #     with:
+    #       name: dist-files
+    #   - run: echo "Deploying... ${{ needs.build.outputs.script-file }}"
+
+
 
   # Run if `needs` jobs failed...
   # report:
