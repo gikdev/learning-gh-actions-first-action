@@ -3,8 +3,14 @@ on:
   push:
     branches: [main]
 
+env:
+  DB_NAME: ""
+
 jobs:
   test:
+    env:
+      DB_CLUSTER_ADDRESS: ""
+      PORT: 3000
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -15,7 +21,8 @@ jobs:
           key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
-      - run: pnpm run test
+      - run: pnpm run test -- http://localhost:$PORT
+      - run: echo "sth = $PORT or sth = ${{ env.PORT }}"
 
   build:
     needs: [test]
