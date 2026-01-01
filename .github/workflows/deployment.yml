@@ -16,11 +16,16 @@ jobs:
   build:
     needs: [test]
     runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{ steps.publish.outputs.script-file }}
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
       - run: pnpm install
       - run: pnpm run build
+      - name: Publish JS filename
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo '::set-output name=script-file::{}' ';'
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
@@ -39,4 +44,4 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: dist-files
-      - run: echo "Deploying..."
+      - run: echo "Deploying... ${{ needs.build.outputs.script-file }}"
