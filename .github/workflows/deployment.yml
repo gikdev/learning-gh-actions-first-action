@@ -9,7 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
-      - run: pnpm install
+      - uses: actions/cache@v5
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-store-${{ hashFiles('**/package-lock.json') }}
+      - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
       - run: pnpm run test
 
@@ -21,20 +25,23 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
-      - run: pnpm install
+      - uses: actions/cache@v5
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-store-${{ hashFiles('**/package-lock.json') }}
+      - run: pnpm install --frozen-lockfile
       - run: pnpm run build
       - name: Publish JS filename
         id: publish
-        run: find dist/assets/*.js -type f -execdir echo '::set-output name=script-file::{}' ';'
+        run: |
+          FILE=$(find dist/assets/*.js -type f | head -n 1)
+          echo "script-file=$FILE" >> $GITHUB_OUTPUT
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
           name: dist-files
           if-no-files-found: error
           path: dist
-          # path: |
-          #   dist
-          #   package.json
 
   deploy:
     needs: [build]
