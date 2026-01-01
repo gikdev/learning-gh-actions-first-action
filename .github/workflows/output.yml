@@ -1,8 +1,23 @@
 name: Output info
-on: issues
+on:
+  pull_request:
+    types: [opened]
+  workflow_dispatch:
 jobs:
   info:
     runs-on: ubuntu-latest
     steps:
       - name: Output GH context
         run: echo "${{ toJSON(github.event) }}"
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run lint
+        run: pnpm run lint
+
+      - name: Build project
+        run: pnpm run build
