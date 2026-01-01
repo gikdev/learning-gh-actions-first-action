@@ -1,51 +1,37 @@
 name: Deploy project
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches: [main]
+
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v6
-
-      # - name: Setup PNPM
-      #   uses: pnpm/action-setup@v4
-
-      # - name: Install dependencies
-      #   run: pnpm install
-
-      # - name: Run lint
-      #   run: pnpm run lint
-
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Get code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install
+      - run: pnpm run lint
+      - run: pnpm run test
 
-      # - name: Setup PNPM
-      #   uses: pnpm/action-setup@v4
-
-      # - name: Install dependencies
-      #   run: pnpm install
-
-      # - name: Run tests
-      #   run: pnpm run test
-
-  deploy:
-    needs: [test, lint]
+  build:
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - name: Get code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install
+      - run: pnpm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: dist-files
+          if-no-files-found: error
+          path: |
+            dist
+            package.json
 
-      # - name: Setup PNPM
-      #   uses: pnpm/action-setup@v4
-
-      # - name: Install dependencies
-      #   run: pnpm install
-
-      # - name: Build project
-      #   run: pnpm run build
-
-      # - name: Deploy
-      #   run: echo "Deploying..."
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying..."
